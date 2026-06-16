@@ -7,6 +7,7 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
@@ -16,7 +17,12 @@ public static class MauiProgram
             });
 
         string dbPath = FileAccessHelper.GetLocalFilePath("people.db3");
-        builder.Services.AddSingleton<PersonRepository>(s => ActivatorUtilities.CreateInstance<PersonRepository>(s, dbPath));
+        builder.Services.AddSingleton<PersonRepository>(
+            s => ActivatorUtilities.CreateInstance<PersonRepository>(s, dbPath));
+
+#if DEBUG
+        builder.Logging.AddDebug();
+#endif
 
         return builder.Build();
     }
